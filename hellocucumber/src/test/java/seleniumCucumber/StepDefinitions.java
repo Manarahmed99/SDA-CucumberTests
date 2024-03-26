@@ -14,8 +14,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.List;
-public class StepDefinitions {
 
+public class StepDefinitions {
     WebDriver driver;
 
     @Given("my browser is open")
@@ -40,8 +40,34 @@ public class StepDefinitions {
         Assertions.assertNotEquals("",actualText);
     }
 
+//    @Before
+//    public void openBrowser(){
+//        driver = new ChromeDriver();
+//        driver.manage().window().maximize();
+//    }
+
     @After()
-    public void closeBrowser() {
+    public void closeBrowser(Scenario scenario) {
+        if (scenario.isFailed()) {
+            byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+            scenario.attach(screenshot, "image/png", "screenshot-"+System.currentTimeMillis());
+        }
         driver.quit();
+    }
+
+    @And("I search for {string}")
+    public void iSearchFor(String searchQuery) {
+        By searchboxInput = By.id("APjFqb");
+        driver.findElement(searchboxInput).sendKeys(searchQuery);
+        driver.findElement(searchboxInput).submit();
+    }
+
+    @And("I search for the following text:")
+    public void iSearchForTheFollowingText(List<String> queries) {
+        By searchboxInput = By.id("APjFqb");
+        queries.forEach(query ->{
+            driver.findElement(searchboxInput).sendKeys(query + " ");
+        });
+        driver.findElement(searchboxInput).submit();
     }
 }

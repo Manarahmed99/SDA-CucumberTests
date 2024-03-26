@@ -11,7 +11,7 @@ import static io.cucumber.junit.platform.engine.Constants.PLUGIN_PROPERTY_NAME;
 @Suite
 @IncludeEngines("cucumber")
 @SelectPackages("seleniumCucumber")
-@ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty")
+@ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty ,  html:target/cucumber.html")
 
 
 public class RunSeleniumTests {
