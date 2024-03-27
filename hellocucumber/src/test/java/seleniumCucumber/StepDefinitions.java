@@ -1,5 +1,7 @@
 package seleniumCucumber;
 
+import google.Results;
+import google.Search;
 import io.cucumber.java.After;
 import io.cucumber.java.Scenario;
 import io.cucumber.java.en.And;
@@ -15,12 +17,10 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.util.List;
-import google.Results;
-import google.Search;
 
 public class StepDefinitions {
     WebDriver driver;
-    Search searchPage;
+    Results results;
 
     @Given("my browser is open")
     public void my_browser_is_open() {
@@ -30,21 +30,14 @@ public class StepDefinitions {
     @When("I navigate to google")
     public void i_navigate_to_google() {
 //        driver.navigate().to("https://www.google.com/");
-        searchPage = new Search(driver);
+        new Search(driver).goTo();
     }
     @When("I search for selenium webdriver")
     public void i_search_for_selenium_webdriver() {
-//        By searchboxInput = By.id("APjFqb");
-//        driver.findElement(searchboxInput).sendKeys("selenium webdriver");
-//        driver.findElement(searchboxInput).submit();
-        searchPage.search("selenium webdriver");
+        results = new Search(driver).search("selenium webdriver");
     }
     @Then("result stats would not be empty")
     public void result_stats_would_not_be_empty() {
-//        By resultStatsLabel = By.id("result-stats");
-//        String actualText = driver.findElement(resultStatsLabel).getText();
-//        Assertions.assertNotEquals("",actualText);
-        Results results = new Results(driver);
         Assertions.assertNotEquals("", results.getResultStats());
     }
 
@@ -56,19 +49,21 @@ public class StepDefinitions {
 
     @After()
     public void closeBrowser(Scenario scenario) {
-        if (scenario.isFailed()) {
-            byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-            scenario.attach(screenshot, "image/png", "screenshot-"+System.currentTimeMillis());
-        }
+//        if (scenario.isFailed()) {
+        byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+        scenario.attach(screenshot, "image/png", "screenshot-"+System.currentTimeMillis());
+//        }
         driver.quit();
     }
 
     @And("I search for {string}")
     public void iSearchFor(String searchQuery) {
-//        By searchboxInput = By.id("APjFqb");
-//        driver.findElement(searchboxInput).sendKeys(searchQuery);
-//        driver.findElement(searchboxInput).submit();
-        searchPage.search(searchQuery);
+        results = new Search(driver).search(searchQuery);
+    }
+
+    @When("I search for something")
+    public void iSearchForSomething() {
+        results = new Search(driver).goTo().search("Parameterized search query");
     }
 
 //    @And("I search for the following text:")
