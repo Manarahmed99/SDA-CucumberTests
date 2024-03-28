@@ -7,7 +7,8 @@ import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
+
 
 public class StepDefinitions {
 
@@ -20,9 +21,10 @@ public class StepDefinitions {
     }
 
     @Then("user waits for {int} seconds")
-    public void user_waits_for_seconds(Integer seconds) {
-        driver.manage().timeouts().implicitlyWait(seconds, TimeUnit.SECONDS);
+    public void user_waits_for_seconds(int seconds) {
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(seconds));
     }
+
 
 
     @And("verifies that the page title contains the word {string}")
